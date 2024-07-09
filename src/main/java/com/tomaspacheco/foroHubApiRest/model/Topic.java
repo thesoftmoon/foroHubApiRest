@@ -2,12 +2,14 @@ package com.tomaspacheco.foroHubApiRest.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 @Table(name = "topics")
 @Entity(name = "Topic")
+@EqualsAndHashCode(of = "id")
 public class Topic {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -82,15 +84,35 @@ public class Topic {
 
     /*Constructor*/
 
-    public Topic(){
+    public Topic() {
 
     }
 
-    public Topic(TopicDTO topicDTO){
+    public Topic(TopicDTO topicDTO) {
         this.titulo = topicDTO.titulo();
         this.mensaje = topicDTO.mensaje();
         this.status = topicDTO.status();
         this.autor = topicDTO.autor();
         this.curso = topicDTO.curso();
+    }
+
+    /*Updater*/
+    public void updateData(TopicDataUpdateDTO topicDataUpdateDTO) {
+
+        if (topicDataUpdateDTO.titulo() != null) {
+            this.titulo = topicDataUpdateDTO.titulo();
+        }
+        if (topicDataUpdateDTO.mensaje() != null) {
+            this.mensaje = topicDataUpdateDTO.mensaje();
+        }
+        if (topicDataUpdateDTO.mensaje() != null) {
+            this.status = topicDataUpdateDTO.status();
+        }
+        if (topicDataUpdateDTO.mensaje() != null) {
+            this.autor = topicDataUpdateDTO.autor();
+        }
+        if (topicDataUpdateDTO.mensaje() != null) {
+            this.curso = topicDataUpdateDTO.curso();
+        }
     }
 }

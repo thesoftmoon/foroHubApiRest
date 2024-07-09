@@ -1,11 +1,9 @@
 package com.tomaspacheco.foroHubApiRest.controller;
 
 
-import com.tomaspacheco.foroHubApiRest.model.Topic;
-import com.tomaspacheco.foroHubApiRest.model.TopicDTO;
-import com.tomaspacheco.foroHubApiRest.model.TopicDataListDTO;
-import com.tomaspacheco.foroHubApiRest.model.TopicResponseDTO;
+import com.tomaspacheco.foroHubApiRest.model.*;
 import com.tomaspacheco.foroHubApiRest.repository.TopicRepository;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -30,22 +28,32 @@ public class TopicController {
     }*/
 
     @GetMapping
-    public ResponseEntity<Page<TopicDataListDTO>> topicList(@PageableDefault(size = 5) Pageable paginacion){
+    public ResponseEntity<Page<TopicDataListDTO>> topicList(@PageableDefault(size = 5) Pageable paginacion) {
         return ResponseEntity.ok(topicRepository.findAll(paginacion).map(TopicDataListDTO::new));
     }
 
     @PostMapping
-    public ResponseEntity<TopicResponseDTO> doctorRegister(@RequestBody @Valid TopicDTO topicDTO, UriComponentsBuilder uriComponentBuilder){
+    public ResponseEntity<TopicResponseDTO> doctorRegister(@RequestBody @Valid TopicDTO topicDTO, UriComponentsBuilder uriComponentBuilder) {
         System.out.println("El request llega correctamente");
         System.out.println(topicDTO);
         Topic topic = topicRepository.save(new Topic(topicDTO));
         //debe ser codigo 201
         //Debes retornar la url donde puedes pillar este doctor
-        TopicResponseDTO topicResponseDTO = new TopicResponseDTO(topic.getId(), topic.getTitulo(), topic.getMensaje(), topic.getStatus(), topic.getAutor(), topic.getCurso());
+        TopicResponseDTO topicResponseDTO = new TopicResponseDTO(topic.getId(), topic.getTitulo(), topic.getFecha_creacion(), topic.getMensaje(), topic.getStatus(), topic.getAutor(), topic.getCurso());
         /*Crea la url dinamica*/
         URI url = uriComponentBuilder.path("/topics/{id}").buildAndExpand(topic.getId()).toUri();
         /*Retorna la url del doctor creado*/
         return ResponseEntity.created(url).body(topicResponseDTO);
+    }
+
+    @PutMapping
+    @Transactional
+    public ResponseEntity doctorUpdate(@RequestBody @Valid TopicDataUpdateDTO topicDataUpdateDTO) {
+        Topic topic = topicRepository.getReferenceById(topicDataUpdateDTO.id());
+        topic.updateData(topicDataUpdateDTO);
+        return ResponseEntity.ok(
+                new TopicResponseDTO(topic.getId(), topic.getTitulo(), topic.getFecha_creacion(), topic.getMensaje(), topic.getStatus(), topic.getAutor(), topic.getCurso())
+        );
     }
 
 }
