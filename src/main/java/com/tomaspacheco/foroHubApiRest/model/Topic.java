@@ -1,7 +1,10 @@
 package com.tomaspacheco.foroHubApiRest.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Getter;
+
+import java.time.LocalDateTime;
 
 @Table(name = "topics")
 @Entity(name = "Topic")
@@ -11,10 +14,15 @@ public class Topic {
     private Long id;
     private String titulo;
     private String mensaje;
-    /*private String fecha_creacion;*/
+    private LocalDateTime fecha_creacion;
     private String status;
     private String autor;
     private String curso;
+
+    @PrePersist
+    protected void onCreate() {
+        this.fecha_creacion = LocalDateTime.now();
+    }
 
     public Long getId() {
         return id;
@@ -62,5 +70,27 @@ public class Topic {
 
     public void setCurso(String curso) {
         this.curso = curso;
+    }
+
+    public LocalDateTime getFecha_creacion() {
+        return fecha_creacion;
+    }
+
+    public void setFecha_creacion(LocalDateTime fecha_creacion) {
+        this.fecha_creacion = fecha_creacion;
+    }
+
+    /*Constructor*/
+
+    public Topic(){
+
+    }
+
+    public Topic(TopicDTO topicDTO){
+        this.titulo = topicDTO.titulo();
+        this.mensaje = topicDTO.mensaje();
+        this.status = topicDTO.status();
+        this.autor = topicDTO.autor();
+        this.curso = topicDTO.curso();
     }
 }
