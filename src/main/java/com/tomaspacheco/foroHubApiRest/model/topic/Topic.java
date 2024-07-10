@@ -1,9 +1,7 @@
-package com.tomaspacheco.foroHubApiRest.model;
+package com.tomaspacheco.foroHubApiRest.model.topic;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 
 import java.time.LocalDateTime;
 

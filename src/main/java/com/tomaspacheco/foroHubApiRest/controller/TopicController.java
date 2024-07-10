@@ -1,7 +1,7 @@
 package com.tomaspacheco.foroHubApiRest.controller;
 
 
-import com.tomaspacheco.foroHubApiRest.model.*;
+import com.tomaspacheco.foroHubApiRest.model.topic.*;
 import com.tomaspacheco.foroHubApiRest.repository.TopicRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;

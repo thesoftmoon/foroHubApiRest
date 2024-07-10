@@ -1,4 +1,4 @@
-package com.tomaspacheco.foroHubApiRest.model;
+package com.tomaspacheco.foroHubApiRest.model.topic;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
