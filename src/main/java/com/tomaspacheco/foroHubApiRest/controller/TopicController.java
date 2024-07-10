@@ -34,15 +34,9 @@ public class TopicController {
 
     @PostMapping
     public ResponseEntity<TopicResponseDTO> doctorRegister(@RequestBody @Valid TopicDTO topicDTO, UriComponentsBuilder uriComponentBuilder) {
-        System.out.println("El request llega correctamente");
-        System.out.println(topicDTO);
         Topic topic = topicRepository.save(new Topic(topicDTO));
-        //debe ser codigo 201
-        //Debes retornar la url donde puedes pillar este doctor
         TopicResponseDTO topicResponseDTO = new TopicResponseDTO(topic.getId(), topic.getTitulo(), topic.getFecha_creacion(), topic.getMensaje(), topic.getStatus(), topic.getAutor(), topic.getCurso());
-        /*Crea la url dinamica*/
         URI url = uriComponentBuilder.path("/topics/{id}").buildAndExpand(topic.getId()).toUri();
-        /*Retorna la url del doctor creado*/
         return ResponseEntity.created(url).body(topicResponseDTO);
     }
 
@@ -54,6 +48,13 @@ public class TopicController {
         return ResponseEntity.ok(
                 new TopicResponseDTO(topic.getId(), topic.getTitulo(), topic.getFecha_creacion(), topic.getMensaje(), topic.getStatus(), topic.getAutor(), topic.getCurso())
         );
+    }
+
+    @DeleteMapping("/{id}")
+    @Transactional
+    public void deleteTopic(@PathVariable Long id) {
+        Topic topic = topicRepository.getReferenceById(id);
+        topicRepository.delete(topic);
     }
 
 }
